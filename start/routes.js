@@ -16,10 +16,6 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-});
+Route.post('/login', 'LoginController.Login');
 
-Route.get('/login', 'LoginController.Auth');
-
-Route.get('/register', 'LoginController.Register');
+Route.post('/register', 'LoginController.Register');

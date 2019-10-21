@@ -3,11 +3,12 @@
 const User = use('App/Models/User');
 
 class LoginController {
-  async Auth({ request, auth }) {
-    const { email, passwotd } = request.all();
 
-    const token = await auth.Attempt(email, passwotd);
+  async Login({ request, auth }) {
+    const { email, password } = request.all();
 
+    const token = await auth.attempt(email, password); 
+    
     return token;
   }
 
