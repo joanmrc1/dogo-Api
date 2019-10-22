@@ -7,9 +7,15 @@ class LoginController {
   async Login({ request, auth }) {
     const { email, password } = request.all();
 
-    const token = await auth.attempt(email, password); 
-    
-    return token;
+    try {
+      const token = await auth.attempt(email, password);
+
+      const user = await User.findBy('email', email);
+
+      return {token, user};
+    } catch (error) {
+      return error;
+    }
   }
 
   async Register ({ request, auth }) {
@@ -19,7 +25,7 @@ class LoginController {
 
     const token = await auth.generate(user)
 
-    return token;
+    return {token, user};
   }
 }
 
