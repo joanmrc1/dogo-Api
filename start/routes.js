@@ -19,3 +19,5 @@ const Route = use('Route')
 Route.post('/login', 'LoginController.Login');
 
 Route.post('/register', 'LoginController.Register');
+
+Route.resource('pets', 'PetController').apiOnly()
