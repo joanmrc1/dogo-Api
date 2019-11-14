@@ -21,3 +21,5 @@ Route.post('/login', 'LoginController.Login');
 Route.post('/register', 'LoginController.Register');
 
 Route.resource('pets', 'PetController').apiOnly()
+Route.resource('vaccines', 'VaccineController').apiOnly()
+Route.resource('vermugations', 'VermugationController').apiOnly()
