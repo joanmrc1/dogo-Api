@@ -39,25 +39,29 @@ class PetController {
    */
   async store ({ request, response }) {
     try {
-      const { name, sexy, breed, species, coat, birthday, doctor, user_id } = request.all()
+      const { name, gender, breed, species, fur, birthday, veterinary, user_id } = request.all()
+
       const images = request.file('avatar', {
         types: ['image'],
         size: '2mb'
       })
+
       await images.move(Helpers.tmpPath('uploads'), {
         name: `${new Date().getTime()}.${images.clientName}`
       })
+
       if (!images.moved()) {
         return images.errors()
       }
+
       const pet = await Pet.create({
         name,
-        sexy,
+        gender,
         breed,
         species,
-        coat,
+        fur,
         birthday,
-        doctor,
+        veterinary,
         user_id,
         avatar: images.fileName
       })
@@ -93,7 +97,7 @@ class PetController {
    */
   async update ({ params: { id }, request, response }) {
     const pet = await Pet.findOrFail(id)
-    const { name, sexy, breed, species, coat, birthday, doctor, user_id } = request.all()
+    const { name, gender, breed, species, fur, birthday, veterinary, user_id } = request.all()
     const images = request.file('avatar', {
       types: ['image'],
       size: '2mb'
@@ -108,12 +112,12 @@ class PetController {
     }
     pet.merge({
       name,
-      sexy,
+      gender,
       breed,
       species,
-      coat,
+      fur,
       birthday,
-      doctor,
+      veterinary,
       user_id,
       avatar: images.fileName
     })
