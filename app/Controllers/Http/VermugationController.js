@@ -17,7 +17,15 @@ class VermugationController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, view, pagination }) {
+    const name = request.input('name')
+    const query = Vermugation.query()
+    // se usar mysql troque ILIKE por LIKE
+    if(name) {
+      query.where('name', 'ILIKE', `%${name}%`)
+    }
+    const vermugation = await query.paginate(pagination.page, pagination.limit)
+    return response.send(vermugation)
   }
 
   /**
@@ -40,7 +48,9 @@ class VermugationController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params: { id }, request, response, view }) {
+    const vermugation = await Vermugation.findOrFail(id)
+    return response.send(vermugation)
   }
 
   /**
@@ -62,7 +72,16 @@ class VermugationController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params: { id }, request, response }) {
+    const vermugation = await Vermugation.findOrFail(id)
+    try {
+      await vermugation.delete()
+      return response.status(204).send()
+    }catch (error) {
+      response.status(500).send({
+        message: 'Não foi possível deletar este registro!'
+      })
+    }
   }
 }
 

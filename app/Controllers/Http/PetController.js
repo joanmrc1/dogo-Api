@@ -39,7 +39,7 @@ class PetController {
    */
   async store ({ request, response }) {
     try {
-      const { name, sexy, breed, species, coat, birthday, doctor } = request.all()
+      const { name, sexy, breed, species, coat, birthday, doctor, user_id } = request.all()
       const images = request.file('avatar', {
         types: ['image'],
         size: '2mb'
@@ -58,6 +58,7 @@ class PetController {
         coat,
         birthday,
         doctor,
+        user_id,
         avatar: images.fileName
       })
       return response.status(201).send(pet)
@@ -92,7 +93,7 @@ class PetController {
    */
   async update ({ params: { id }, request, response }) {
     const pet = await Pet.findOrFail(id)
-    const { name, sexy, breed, species, coat, birthday, doctor } = request.all()
+    const { name, sexy, breed, species, coat, birthday, doctor, user_id } = request.all()
     const images = request.file('avatar', {
       types: ['image'],
       size: '2mb'
@@ -113,6 +114,7 @@ class PetController {
       coat,
       birthday,
       doctor,
+      user_id,
       avatar: images.fileName
     })
     await pet.save()

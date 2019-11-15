@@ -17,7 +17,15 @@ class VaccineController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, view, pagination }) {
+    const name = request.input('name')
+    const query = Vaccine.query()
+    // se usar mysql troque ILIKE por LIKE
+    if(name) {
+      query.where('name', 'ILIKE', `%${name}%`)
+    }
+    const vaccines = await query.paginate(pagination.page, pagination.limit)
+    return response.send(vaccines)
   }
 
   /**
@@ -29,6 +37,14 @@ class VaccineController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    try {
+      const { name, vaccine_in, next_vaccine } = request.all()
+      const vaccine = await Vaccine.create({ name, vaccine_in, next_vaccine })
+      return response.status(201).send(vaccine)
+    } catch (error) {
+      response.status(400)
+      .send({ message: 'Não foi possivel criar a vacina neste momento!'})
+    }
   }
 
   /**
@@ -40,7 +56,9 @@ class VaccineController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params: { id }, request, response, view }) {
+    const vaccine = await Vaccine.findOrFail(id)
+    return response.send(vaccine)
   }
 
   /**
@@ -51,7 +69,18 @@ class VaccineController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params: { id }, request, response }) {
+    const vaccine = await Vaccine.findOrFail(id)
+    try {
+      const { name, vaccine_in, next_vaccine } = request.all()
+      vaccine.merge({ name, vaccine_in, next_vaccine })
+      await vaccine.save()
+      return response.send(vaccine)
+    } catch (error) {
+      return response.status(400).send({
+        message: 'Não foi possível atualizar!'
+      })
+    }
   }
 
   /**
@@ -62,7 +91,16 @@ class VaccineController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params: { id }, request, response }) {
+    const vaccine = await Vaccine.findOrFail(id)
+    try {
+      await vaccine.delete()
+      return response.status(204).send()
+    }catch (error) {
+      response.status(500).send({
+        message: 'Não foi possível deletar este registro!'
+      })
+    }
   }
 }
 
