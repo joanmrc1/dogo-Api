@@ -37,6 +37,14 @@ class VermugationController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    try {
+      const { name, weight, date_of_appointment, repeat_in } = request.all()
+      const vermugation = await Vermugation.create({ name, weight, date_of_appointment, repeat_in })
+      return response.status(201).send(vermugation)
+    } catch (error) {
+      response.status(400)
+      .send({ message: 'Não foi possivel criar a vacina neste momento!'})
+    }
   }
 
   /**
@@ -61,7 +69,18 @@ class VermugationController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params: { id }, request, response }) {
+    const vermugation = await Vermugation.findOrFail(id)
+    try {
+      const { name, weight, date_of_appointment, repeat_in } = request.all()
+      vermugation.merge({ name, weight, date_of_appointment, repeat_in })
+      await vaccine.save()
+      return response.send(vermugation)
+    } catch (error) {
+      return response.status(400).send({
+        message: 'Não foi possível atualizar!'
+      })
+    }
   }
 
   /**
