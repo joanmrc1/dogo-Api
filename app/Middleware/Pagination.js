@@ -11,18 +11,18 @@ class Pagination {
    */
   async handle ({ request }, next) {
     // call next to advance the request
-    if(ctx.request.method() === 'GET'){
-      const page = parseInt(ctx.request.input('page'))
-      const limit = parseInt(ctx.request.input('limit'))
-      ctx.pagination = {
-        page,
-        limit
-      }
-      const perpage = parseInt(ctx.request.input('perpage'))
-      if(perpage) {
-        ctx.pagination.limit = perpage
-      }
-    }
+    // if(request.method() === 'GET'){
+    //   const page = parseInt(ctx.request.input('page'))
+    //   const limit = parseInt(ctx.request.input('limit'))
+    //   ctx.pagination = {
+    //     page,
+    //     limit
+    //   }
+    //   const perpage = parseInt(ctx.request.input('perpage'))
+    //   if(perpage) {
+    //     ctx.pagination.limit = perpage
+    //   }
+    // }
     await next()
   }
 }
