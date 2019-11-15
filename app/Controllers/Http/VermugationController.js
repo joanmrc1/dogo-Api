@@ -17,7 +17,15 @@ class VermugationController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, view, pagination }) {
+    const name = request.input('name')
+    const query = Vermugation.query()
+    // se usar mysql troque ILIKE por LIKE
+    if(name) {
+      query.where('name', 'ILIKE', `%${name}%`)
+    }
+    const vermugation = await query.paginate(pagination.page, pagination.limit)
+    return response.send(vermugation)
   }
 
   /**
@@ -29,6 +37,14 @@ class VermugationController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    try {
+      const { name, weight, date_of_appointment, repeat_in } = request.all()
+      const vermugation = await Vermugation.create({ name, weight, date_of_appointment, repeat_in })
+      return response.status(201).send(vermugation)
+    } catch (error) {
+      response.status(400)
+      .send({ message: 'Não foi possivel criar a vacina neste momento!'})
+    }
   }
 
   /**
@@ -40,7 +56,9 @@ class VermugationController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params: { id }, request, response, view }) {
+    const vermugation = await Vermugation.findOrFail(id)
+    return response.send(vermugation)
   }
 
   /**
@@ -51,7 +69,18 @@ class VermugationController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params: { id }, request, response }) {
+    const vermugation = await Vermugation.findOrFail(id)
+    try {
+      const { name, weight, date_of_appointment, repeat_in } = request.all()
+      vermugation.merge({ name, weight, date_of_appointment, repeat_in })
+      await vaccine.save()
+      return response.send(vermugation)
+    } catch (error) {
+      return response.status(400).send({
+        message: 'Não foi possível atualizar!'
+      })
+    }
   }
 
   /**
@@ -62,7 +91,16 @@ class VermugationController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params: { id }, request, response }) {
+    const vermugation = await Vermugation.findOrFail(id)
+    try {
+      await vermugation.delete()
+      return response.status(204).send()
+    }catch (error) {
+      response.status(500).send({
+        message: 'Não foi possível deletar este registro!'
+      })
+    }
   }
 }
 

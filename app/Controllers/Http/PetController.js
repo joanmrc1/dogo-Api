@@ -43,7 +43,6 @@ class PetController {
    */
   async store ({ request, response, auth }) {
     try {
-
       const { name, gender, breed, species, fur, birthday, veterinary } = request.all()
 
       const user = await auth.getUser()
@@ -109,8 +108,8 @@ class PetController {
    */
   async update ({ params: { id }, request, response }) {
     const pet = await Pet.findOrFail(id)
-
-    const { name, sexy, breed, species, coat, birthday, doctor } = request.all()
+    
+    const { name, gender, breed, species, fur, birthday, veterinary } = request.all()
 
     const images = request.file('avatar', {
       types: ['image'],
@@ -127,12 +126,13 @@ class PetController {
 
     pet.merge({
       name,
-      sexy,
+      gender,
       breed,
       species,
-      coat,
+      fur,
       birthday,
-      doctor,
+      veterinary,
+      user_id,
       avatar: images.fileName
     })
     await pet.save()
