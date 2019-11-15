@@ -18,38 +18,38 @@ Factory.blueprint('App/Models/User', (faker) => {
   return {
     name: faker.name(),
     birthday: faker.birthday(),
-    email: faker.email({ domain: 'fsocietybrasil.org' }),
+    email: faker.email({ domain: 'contato.org' }),
     password: 'secret'
   }
 })
 
 Factory.blueprint('App/Models/Pet', (faker) => {
   return {
-    name,
-    gender,
-    breed,
-    species,
-    fur,
-    birthday,
-    veterinary,
-    user_id,
-    avatar: images.fileName
+    name: faker.name(),
+    gender: faker.gender(),
+    breed: faker.animal(),
+    species: faker.animal(),
+    fur: faker.animal(),
+    birthday: faker.birthday(),
+    veterinary: faker.name(),
+    user_id: faker.integer({ min: 1, max: 10 }),
+    avatar: faker.url()
   }
 })
 
 Factory.blueprint('App/Models/Vaccine', (faker) => {
   return {
-    name,
-    vaccine_in,
-    next_vaccine
+    name: faker.name(),
+    vaccine_in: faker.date(),
+    next_vaccine: faker.date()
   }
 })
 
 Factory.blueprint('App/Models/Vermugation', (faker) => {
   return {
-    name,
-    weight,
-    date_of_appointment,
-    repeat_in
+    name: faker.name(),
+    weight: faker.floating({ min: 1, max: 100 }),
+    date_of_appointment: faker.date(),
+    repeat_in: faker.date()
   }
 })

@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| VermugationPetSeeder
+| VaccinePetSeeder
 |--------------------------------------------------------------------------
 |
 | Make use of the Factory instance to seed database with dummy data or
@@ -12,20 +12,28 @@
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
-
-class VermugationPetSeeder {
+class VaccinePetSeeder {
   async run () {
+    const vaccine = await Factory.model('App/Models/Vaccine').createMany(10)
     const vermugation = await Factory.model('App/Models/Vermugation').createMany(10)
+    const pets = await Factory.model('App/Models/Pet').createMany(10)
+
+    await Promise.all(
+      vaccine.map( async vaccine => {
+        await Promise.all(pets.map(async pet => {
+          await pet.vaccines().attach([vaccine.id])
+        }))
+      })
+    )
 
     await Promise.all(
       vermugation.map( async vermugation => {
-        const pets = await Factory.model('App/Models/Pet')
         await Promise.all(pets.map(async pet => {
-          await pet.vaccines().attach([vermugation.id])
+          await pet.vermugations().attach([vermugation.id])
         }))
       })
     )
   }
 }
 
-module.exports = VermugationPetSeeder
+module.exports = VaccinePetSeeder

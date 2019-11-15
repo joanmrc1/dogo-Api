@@ -24,7 +24,7 @@ class PetVaccineSchema extends Schema {
   }
 
   down () {
-    this.drop('pet_vaccines')
+    this.drop('pet_vaccine')
   }
 }
 

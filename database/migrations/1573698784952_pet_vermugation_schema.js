@@ -24,7 +24,7 @@ class PetVermugationSchema extends Schema {
   }
 
   down () {
-    this.drop('pet_vermugations')
+    this.drop('pet_vermugation')
   }
 }
 
