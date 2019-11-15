@@ -39,24 +39,29 @@ class PetController {
    */
   async store ({ request, response }) {
     try {
-      const { name, sexy, breed, species, coat, birthday, doctor } = request.all()
+      const { name, gender, breed, species, fur, birthday, veterinary } = request.all()
+
       const images = request.file('avatar', {
         types: ['image'],
         size: '2mb'
       })
+
       await images.move(Helpers.tmpPath('uploads'), {
         name: `${new Date().getTime()}.${images.clientName}`
       })
+
       if (!images.moved()) {
         return images.errors()
       }
+
       const pet = await Pet.create({
         name,
-        sexy,
+        gender,
         breed,
         species,
-        coat,
+        fur,
         birthday,
+        veterinary,
         doctor,
         avatar: images.fileName
       })
