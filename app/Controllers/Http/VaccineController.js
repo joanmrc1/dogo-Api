@@ -38,8 +38,10 @@ class VaccineController {
    */
   async store ({ request, response }) {
     try {
-      const { name, vaccine_in, next_vaccine } = request.all()
-      const vaccine = await Vaccine.create({ name, vaccine_in, next_vaccine })
+      const { name, pet_id, type, vaccine_in, next_vaccine } = request.all()
+
+      const vaccine = await Vaccine.create({ name, pet_id, type, vaccine_in, next_vaccine })
+
       return response.status(201).send(vaccine)
     } catch (error) {
       response.status(400)

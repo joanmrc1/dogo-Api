@@ -38,13 +38,16 @@ class VermugationController {
    */
   async store ({ request, response }) {
     try {
-      const { name, weight, date_of_appointment, repeat_in } = request.all()
+      const { name, pet_id, weight, date_of_appointment, repeat_in } = request.all()
+
       const vermugation = await Vermugation.create({
         name,
+        pet_id,
         weight,
         date_of_appointment,
         repeat_in
       })
+
       return response.status(201).send(vermugation)
     } catch (error) {
       response.status(400)
