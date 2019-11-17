@@ -62,6 +62,8 @@ class PetController {
         }
       }
 
+      const contPet = await Pet.query().where('user_id', user.id).getCount()
+
       const pet = await Pet.create({
         name,
         gender,
@@ -72,6 +74,7 @@ class PetController {
         veterinary,
         avatar: images !== null ? images.fileName : null,
         user_id: user.id
+        favorite: contPet > 0 ? false : true
       })
       return response.status(201).send(pet)
     } catch (error) {

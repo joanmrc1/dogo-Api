@@ -17,8 +17,8 @@
 const Route = use('Route')
 
 Route.post('/login', 'LoginController.Login');
-
 Route.post('/register', 'LoginController.Register');
+Route.get('/info/user', 'UserController.getInfoUser');
 
 Route.resource('pets', 'PetController').apiOnly()
 Route.resource('vaccines', 'VaccineController').apiOnly()
