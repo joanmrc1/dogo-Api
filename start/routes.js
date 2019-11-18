@@ -20,6 +20,7 @@ Route.post('/login', 'LoginController.Login');
 Route.post('/register', 'LoginController.Register');
 Route.get('/info/user', 'UserController.getInfoUser');
 
-Route.resource('pets', 'PetController').apiOnly()
+Route.get('my/pets', 'PetController.myPets');
+Route.resource('pets', 'PetController')
 Route.resource('vaccines', 'VaccineController').apiOnly()
 Route.resource('vermugations', 'VermugationController').apiOnly()

@@ -17,15 +17,13 @@ class VermugationController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view, pagination }) {
-    const name = request.input('name')
-    const query = Vermugation.query()
-    // se usar mysql troque ILIKE por LIKE
-    if(name) {
-      query.where('name', 'ILIKE', `%${name}%`)
-    }
-    const vermugation = await query.paginate(pagination.page, pagination.limit)
-    return response.send(vermugation)
+  async index ({ request, response }) {
+    
+    const { petId } = request.all()
+
+    const vermigation = await Vermugation.query().where('pet_id', petId).fetch()
+   
+    return response.send(vermigation)
   }
 
   /**

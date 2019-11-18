@@ -16,7 +16,7 @@ class UserController {
 	    return response.send({
 	    	user,
 	    	pets,
-	    	favorityPet
+	    	favorityPet,
 	    })
     }
 }

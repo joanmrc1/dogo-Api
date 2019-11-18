@@ -73,7 +73,7 @@ class PetController {
         birthday,
         veterinary,
         avatar: images !== null ? images.fileName : null,
-        user_id: user.id
+        user_id: user.id,
         favorite: contPet > 0 ? false : true
       })
       return response.status(201).send(pet)
@@ -160,6 +160,14 @@ class PetController {
         message: 'Não foi possível deletar este pet!'
       })
     }
+  }
+
+  async myPets ({ auth, response }) {
+    const user = await auth.getUser()
+
+    const pets = await user.pets().fetch()
+
+    response.send(pets)
   }
 }
 

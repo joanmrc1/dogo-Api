@@ -17,14 +17,12 @@ class VaccineController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view, pagination }) {
-    const name = request.input('name')
-    const query = Vaccine.query()
-    // se usar mysql troque ILIKE por LIKE
-    if(name) {
-      query.where('name', 'ILIKE', `%${name}%`)
-    }
-    const vaccines = await query.paginate(pagination.page, pagination.limit)
+  async index ({ request, response }) {
+
+    const { petId } = request.all()
+
+    const vaccines = await Vaccine.query().where('pet_id', petId).fetch()
+   
     return response.send(vaccines)
   }
 
