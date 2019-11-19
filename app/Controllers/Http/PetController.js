@@ -76,7 +76,7 @@ class PetController {
         user_id: user.id,
         favorite: contPet > 0 ? false : true
       })
-      return response.status(201).send(pet)
+      return response.send({newPet: pet})
     } catch (error) {
       console.log(error);
 
